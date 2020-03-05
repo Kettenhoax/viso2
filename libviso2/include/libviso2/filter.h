@@ -18,9 +18,7 @@ You should have received a copy of the GNU General Public License along with
 libelas; if not, write to the Free Software Foundation, Inc., 51 Franklin
 Street, Fifth Floor, Boston, MA 02110-1301, USA
 */
-
-#ifndef __FILTER_H__
-#define __FILTER_H__
+#pragma once
 
 #if defined(__ARM_NEON__)
 #include "sse_to_neon.hpp"
@@ -98,6 +96,4 @@ namespace filter {
   // -1  1  1  1 -1
   // -1 -1 -1 -1 -1
   void blob5x5( const uint8_t* in, int16_t* out, int w, int h );
-};
-
-#endif
+}

@@ -1,0 +1,32 @@
+<package format="3">
+  <name>viso2_stereo</name>
+  <version>0.1.0</version>
+  <description>Visual odometry from stereo images</description>
+
+  <license>GPL</license>
+
+  <url type="website">http://ros.org/wiki/viso2_stereo</url>
+  <url type="bugtracker">https://github.com/srv/viso2/issues</url>
+
+  <author email="stephan.wirth@uib.es">Stephan Wirth</author>
+  <author email="marcel.zeilinger.fl@ait.ac.at">Marcel Zeilinger</author>
+  <maintainer email="stephan.wirth@uib.es">Stephan Wirth</maintainer>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>libviso2</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>diagnostic_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>image_geometry</depend>
+  <depend>image_transport</depend>
+
+  <member_of_group>rosidl_interface_packages</member_of_group>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

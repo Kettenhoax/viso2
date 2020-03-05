@@ -22,10 +22,6 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 #ifndef VISO_STEREO_H
 #define VISO_STEREO_H
 
-//#include <fstream>
-//#include <sstream>
-//#include <stdio.h>
-//#include <iomanip>
 #include "viso.h"
 
 class VisualOdometryStereo : public VisualOdometry {
@@ -66,7 +62,7 @@ public:
   //                     when small/no motions are observed to obtain Tr_delta wrt
   //                     an older coordinate system / time step than the previous one.
   // output: returns false if an error occured
-  bool process (uint8_t *I1,uint8_t *I2,int32_t* dims,bool replace=false);
+  bool process (const uint8_t *I1,const uint8_t *I2,int32_t* dims,bool replace=false);
 
   using VisualOdometry::process;
 
