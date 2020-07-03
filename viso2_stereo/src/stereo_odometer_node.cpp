@@ -104,9 +104,8 @@ protected:
       RCLCPP_ERROR(this->get_logger(), "Left image must have a frame id");
       return;
     }
-
     image_geometry::StereoCameraModel model;
-    model.fromCameraInfo(*l_info_msg, *r_info_msg);
+    model.fromCameraInfo(l_info_msg, r_info_msg);
     visual_odometer_params_.base = model.baseline();
     visual_odometer_params_.calib.cu = model.left().cx();
     visual_odometer_params_.calib.cv = model.left().cy();

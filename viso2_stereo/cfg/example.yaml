@@ -2,7 +2,6 @@ stereo_odometer:
   __ros_parameters:
     frame_odom: odom
     frame_base_link: base_link
-    frame_postfix_sensor: sensor
 
     initialize_pose_as_id: true
     publish_tf: true
