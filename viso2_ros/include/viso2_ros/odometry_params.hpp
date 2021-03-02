@@ -4,8 +4,10 @@
 
 #include <libviso2/viso_stereo.h>
 #include <libviso2/viso_mono.h>
+#include <libviso2/viso_mono_omnidirectional.h>
+#include <fstream>
 
-namespace viso2_stereo
+namespace viso2_ros
 {
 
 namespace odometry_params
@@ -97,6 +99,125 @@ void load_params(NodeParametersInterface::SharedPtr params, VisualOdometryStereo
     rclcpp::ParameterValue(out.cov_svd_factor)).get<double>();
 }
 
+/// loads common & mono specific params
+void load_params(NodeParametersInterface::SharedPtr params, VisualOdometryMono::parameters & out)
+{
+  load_common_params(params, out);
+  out.height =
+    params->declare_parameter(
+    "camera_height",
+    rclcpp::ParameterValue(out.height)).get<double>();
+  out.pitch =
+    params->declare_parameter(
+    "camera_pitch",
+    rclcpp::ParameterValue(out.pitch)).get<double>();
+  out.ransac_iters =
+    params->declare_parameter(
+    "ransac_iters",
+    rclcpp::ParameterValue(out.ransac_iters)).get<int>();
+  out.inlier_threshold =
+    params->declare_parameter(
+    "inlier_threshold",
+    rclcpp::ParameterValue(out.inlier_threshold)).get<double>();
+  out.motion_threshold =
+    params->declare_parameter(
+    "motion_threshold",
+    rclcpp::ParameterValue(out.motion_threshold)).get<double>();
+
+}
+
+/// loads common & omnidirectional mono specific params
+void load_params(NodeParametersInterface::SharedPtr params, VisualOdometryMonoOmnidirectional::parameters & out)
+{
+  load_common_params(params, out); 
+  out.ransac_iters =
+    params->declare_parameter(
+    "ransac_iters",
+    rclcpp::ParameterValue(out.ransac_iters)).get<int>();
+  out.inlier_threshold =
+    params->declare_parameter(
+    "inlier_threshold",
+    rclcpp::ParameterValue(out.inlier_threshold)).get<double>();
+  out.motion_threshold =
+    params->declare_parameter(
+    "motion_threshold",
+    rclcpp::ParameterValue(out.motion_threshold)).get<double>();
+  std::string path;
+  path =
+    params->declare_parameter(
+    "calib_path",
+    rclcpp::ParameterValue(path)).get<std::string>();
+  std::ifstream file(path.c_str());
+    if(file.is_open())
+  {
+    std::string s;
+
+    //Read polynomial coefficients
+    std::getline(file, s);
+    file >> out.omnidirectional_calib.length_pol;
+    for (int i = 0; i < out.omnidirectional_calib.length_pol; i++)
+    {
+      file >> out.omnidirectional_calib.pol[i];
+    }
+
+    //Read inverse polynomial coefficients
+    std::getline(file, s);
+    std::getline(file, s);
+    std::getline(file, s);
+    file >> out.omnidirectional_calib.length_invpol;
+    for (int i = 0; i < out.omnidirectional_calib.length_invpol; i++)
+    {
+      file >> out.omnidirectional_calib.invpol[i];
+    }
+
+    //Read center coordinates
+    std::getline(file, s);
+    std::getline(file, s);
+    std::getline(file, s);
+    file >> out.omnidirectional_calib.xc >> 
+            out.omnidirectional_calib.yc;
+    
+    //Read affine coefficients
+    std::getline(file, s);
+    std::getline(file, s);
+    std::getline(file, s);
+    file >> out.omnidirectional_calib.c >> 
+            out.omnidirectional_calib.d >>
+            out.omnidirectional_calib.e;
+    
+    //Read image size
+    std::getline(file, s);
+    std::getline(file, s);
+    std::getline(file, s);
+    file >> out.omnidirectional_calib.height >> 
+            out.omnidirectional_calib.width;
+
+    file.close();
+  }
+  else
+  {
+    std::cout << "File not found or path not provided" << std::endl;
+    std::cout << "Using default parameters" << std::endl;
+    out.omnidirectional_calib.fx = 1;
+    out.omnidirectional_calib.fy = 1;
+    out.omnidirectional_calib.cx = 0;
+    out.omnidirectional_calib.cy = 0;
+    out.omnidirectional_calib.xc = 1;
+    out.omnidirectional_calib.yc = 1;
+    out.omnidirectional_calib.c  = 1;
+    out.omnidirectional_calib.d  = 1;
+    out.omnidirectional_calib.e  = 1;
+
+    out.omnidirectional_calib.length_pol    = 1;
+    out.omnidirectional_calib.length_invpol = 1;
+    out.omnidirectional_calib.width         = 2;
+    out.omnidirectional_calib.height        = 2;
+
+    out.omnidirectional_calib.pol[0]    = 1;
+    out.omnidirectional_calib.invpol[0] = 1;
+  }
+}
+
 } // end of namespace
 
 std::ostream & operator<<(std::ostream & out, const Matcher::parameters & params)
@@ -119,6 +240,32 @@ std::ostream & operator<<(std::ostream & out, const VisualOdometry::calibration 
   out << "  f  = " << calibration.f << std::endl;
   out << "  cu = " << calibration.cu << std::endl;
   out << "  cv = " << calibration.cv << std::endl;
+  return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const VisualOdometry::omnidirectional_calibration& params)
+{
+  out << "  poly         = ";
+  for (int i = 0; i < params.length_pol; i++) {
+    out << params.pol[i] << " ; ";
+  }
+  out << std::endl;
+
+  out << "  inverse poly = ";
+  for (int i = 0; i < params.length_invpol; i++) {
+    out << params.invpol[i] << " ; ";
+  }
+  out << std::endl;
+
+  out << "  xc           = " << params.xc << std::endl;
+  out << "  yc           = " << params.yc << std::endl;
+  out << "  width        = " << params.width << std::endl;
+  out << "  height       = " << params.height << std::endl;
+  out << "  fx           = " << params.fx << std::endl;
+  out << "  fy           = " << params.fy << std::endl;
+  out << "  cx           = " << params.cx << std::endl;
+  out << "  cy           = " << params.cy << std::endl;
+
   return out;
 }
 
@@ -161,4 +308,4 @@ std::ostream & operator<<(std::ostream & out, const VisualOdometryMono::paramete
   return out;
 }
 
-} // namespace viso2_stereo
+} // namespace viso2_ros

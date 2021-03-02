@@ -11,9 +11,9 @@
 #include <nav_msgs/msg/odometry.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <std_srvs/srv/empty.hpp>
-#include "viso2_stereo/covariance.hpp"
+#include "viso2_ros/covariance.hpp"
 
-namespace viso2_stereo
+namespace viso2_ros
 {
 
 using nav_msgs::msg::Odometry;
@@ -22,6 +22,18 @@ using geometry_msgs::msg::TransformStamped;
 using rclcpp::callback_group::CallbackGroup;
 using rclcpp::callback_group::CallbackGroupType;
 using std::string;
+
+tf2::Transform to_ros(Matrix matrix)
+{
+  tf2::Matrix3x3 rot_mat(
+    matrix.val[0][0], matrix.val[0][1], matrix.val[0][2],
+    matrix.val[1][0], matrix.val[1][1], matrix.val[1][2],
+    matrix.val[2][0], matrix.val[2][1], matrix.val[2][2]);
+  tf2::Vector3 t(matrix.val[0][3], matrix.val[1][3], matrix.val[2][3]);
+  tf2::Transform delta_transform(rot_mat, t);
+  return delta_transform;
+}
+
 
 class OdometryPublisher
 {
@@ -136,8 +148,10 @@ public:
   }
 
 public:
+
+template <typename T>
   void update_and_publish(
-    std::shared_ptr<VisualOdometryStereo>,
+    std::shared_ptr<T>,
     const tf2::Transform & delta_transform, const rclcpp::Time & t, std::array<double,
     36> pose_covariance, std::array<double, 36> twist_covariance)
   {
@@ -332,4 +346,4 @@ public:
   }
 };
 
-} // namespace viso2_stereo
+} // namespace viso2_ros

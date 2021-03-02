@@ -5,7 +5,9 @@
 #include <memory>
 #include <rclcpp/rclcpp.hpp>
 
-namespace viso2_stereo
+#include "libviso2/viso_stereo.h"
+
+namespace viso2_ros
 {
 
 class CovarianceStrategy
@@ -182,4 +184,4 @@ public:
   }
 };
 
-} // namespace viso2_stereo
+} // namespace viso2_ros

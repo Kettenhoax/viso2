@@ -34,8 +34,8 @@ def generate_launch_description():
             ]
         ))
     components.append(ComposableNode(
-        package='viso2_stereo',
-        node_plugin='viso2_stereo::StereoOdometerNode',
+        package='viso2_ros',
+        node_plugin='viso2_ros::StereoOdometerNode',
         node_name='odometer',
         node_namespace=root_namespace,
         remappings=[

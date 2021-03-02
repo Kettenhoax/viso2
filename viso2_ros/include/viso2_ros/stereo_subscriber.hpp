@@ -14,7 +14,7 @@
 #include "message_filters/signal9.h"
 #include <image_transport/subscriber_filter.h>
 
-namespace viso2_stereo
+namespace viso2_ros
 {
 
 using namespace std::chrono_literals; // NOLINT
@@ -184,4 +184,4 @@ public:
   }
 };
 
-} // namespace viso2_stereo
+} // namespace viso2_ros

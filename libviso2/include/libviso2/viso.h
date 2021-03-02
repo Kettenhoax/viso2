@@ -40,6 +40,25 @@ public:
       cv = 0;
     }
   };
+
+  // omnidirectional camera parameters (all mandatory)
+  struct omnidirectional_calibration {
+    double fx;
+    double fy;
+    double cx;
+    double cy;
+    double xc;
+    double yc;
+    double c;
+    double d;
+    double e;
+    double pol[64];
+    double invpol[256];
+    int    length_pol;
+    int    length_invpol;
+    int    width;
+    int    height;
+  };
   
   // bucketing parameters
   struct bucketing {  
@@ -58,6 +77,7 @@ public:
     Matcher::parameters         match;            // matching parameters
     VisualOdometry::bucketing   bucket;           // bucketing parameters
     VisualOdometry::calibration calib;            // camera calibration parameters
+    VisualOdometry::omnidirectional_calibration omnidirectional_calib;    // fisheye camera calibration parameters
   };
 
   // constructor, takes as input a parameter structure:

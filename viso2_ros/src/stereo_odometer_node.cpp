@@ -6,18 +6,18 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/image_encodings.hpp>
 #include <diagnostic_msgs/msg/diagnostic_status.hpp>
-#include <viso2_stereo/msg/viso_info.hpp>
+#include <viso2_ros/msg/viso_info.hpp>
 
-#include "viso2_stereo/covariance.hpp"
-#include "viso2_stereo/reference_frame.hpp"
-#include "viso2_stereo/stereo_subscriber.hpp"
-#include "viso2_stereo/odometry_publisher.hpp"
-#include "viso2_stereo/odometry_params.hpp"
+#include "viso2_ros/covariance.hpp"
+#include "viso2_ros/reference_frame.hpp"
+#include "viso2_ros/stereo_subscriber.hpp"
+#include "viso2_ros/odometry_publisher.hpp"
+#include "viso2_ros/odometry_params.hpp"
 
-namespace viso2_stereo
+namespace viso2_ros
 {
 
-using viso2_stereo::msg::VisoInfo;
+using viso2_ros::msg::VisoInfo;
 using diagnostic_msgs::msg::DiagnosticStatus;
 using sensor_msgs::msg::Image;
 using sensor_msgs::msg::CameraInfo;
@@ -25,17 +25,6 @@ using std::placeholders::_1;
 using std::placeholders::_2;
 using std::placeholders::_3;
 using std::placeholders::_4;
-
-tf2::Transform to_ros(Matrix matrix)
-{
-  tf2::Matrix3x3 rot_mat(
-    matrix.val[0][0], matrix.val[0][1], matrix.val[0][2],
-    matrix.val[1][0], matrix.val[1][1], matrix.val[1][2],
-    matrix.val[2][0], matrix.val[2][1], matrix.val[2][2]);
-  tf2::Vector3 t(matrix.val[0][3], matrix.val[1][3], matrix.val[2][3]);
-  tf2::Transform delta_transform(rot_mat, t);
-  return delta_transform;
-}
 
 class StereoOdometerNode : public rclcpp::Node
 {
@@ -246,7 +235,7 @@ protected:
   }
 };
 
-} // namespace viso2_stereo
+} // namespace viso2_ros
 
 #include "rclcpp_components/register_node_macro.hpp"
-RCLCPP_COMPONENTS_REGISTER_NODE(viso2_stereo::StereoOdometerNode)
+RCLCPP_COMPONENTS_REGISTER_NODE(viso2_ros::StereoOdometerNode)

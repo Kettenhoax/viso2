@@ -1,11 +1,11 @@
 <package format="3">
-  <name>viso2_stereo</name>
+  <name>viso2_ros</name>
   <version>0.1.0</version>
   <description>Visual odometry from stereo images</description>
 
   <license>GPL</license>
 
-  <url type="website">http://ros.org/wiki/viso2_stereo</url>
+  <url type="website">http://ros.org/wiki/viso2_ros</url>
   <url type="bugtracker">https://github.com/srv/viso2/issues</url>
 
   <author email="stephan.wirth@uib.es">Stephan Wirth</author>
