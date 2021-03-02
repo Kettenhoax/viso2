@@ -53,7 +53,7 @@ public:
     info_pub_ = this->create_publisher<VisoInfo>("info", 1);
     diagnostic_pub_ = this->create_publisher<DiagnosticStatus>("diagnostic", 1);
     
-    image_transport::ImageTransport it(shared_from_this());
+    image_transport::ImageTransport it(this);
     camera_sub_ = it.subscribeCamera("image", 1, &MonoOdometerNode::imageCallback, this);
 
     pose_covariance_.fill(0.0);

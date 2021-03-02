@@ -58,7 +58,7 @@ public:
     "/mono_odometer/image",
     rclcpp::ParameterValue(image_topic)).get<std::string>();
 
-    image_transport::ImageTransport it(shared_from_this());
+    image_transport::ImageTransport it(this);
     camera_sub_ = it.subscribe(image_topic, 1, &MonoOdometerOmnidirectionalNode::imageCallback, this);
 
     pose_covariance_.fill(0.0);
